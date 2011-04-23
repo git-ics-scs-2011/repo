@@ -146,6 +146,7 @@ static void menu_print(void)
 {
   printf("Menu:\n");
   printf("q: quits emulator\n"
+	 "r: print the menu again\n"
 	 "a: does something\n"
 	 "b: does another thing\n"
 	 "z: ..................\n");
@@ -156,6 +157,9 @@ static void menu_command_process(char c)
   switch(c) {
   case 'q':
     done = true;
+    break;
+  case 'r':
+    menu_print();
     break;
   default:
     printf("menu_command_process: default\n");
@@ -173,8 +177,8 @@ int cpu_emu_run(void)
   ret = pthread_create(&int_thread, NULL, cpu_emu_int, NULL);
   assert(ret == 0);
 
+  menu_print();
   do {
-    menu_print();
     c = getc(stdin);
     menu_command_process(c);
   } while (c != 'q');
